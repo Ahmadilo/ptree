@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ptree", "ptree\ptree.csproj", "{34A9ADA7-787B-4ADA-8CC5-2EBB1E4BB128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "executble", "executble\executble.csproj", "{D79F6B7A-19FD-4E68-B577-A5EBA5D7C118}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34A9ADA7-787B-4ADA-8CC5-2EBB1E4BB128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A9ADA7-787B-4ADA-8CC5-2EBB1E4BB128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A9ADA7-787B-4ADA-8CC5-2EBB1E4BB128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A9ADA7-787B-4ADA-8CC5-2EBB1E4BB128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D79F6B7A-19FD-4E68-B577-A5EBA5D7C118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D79F6B7A-19FD-4E68-B577-A5EBA5D7C118}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D79F6B7A-19FD-4E68-B577-A5EBA5D7C118}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D79F6B7A-19FD-4E68-B577-A5EBA5D7C118}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDACAE83-F004-4CA4-9E84-72FCAACC236A}
+	EndGlobalSection
+EndGlobal
