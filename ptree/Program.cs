@@ -14,12 +14,23 @@ namespace ptree
         {
             if (args.Length == 0 || args[0] != "show")
             {
-                Console.WriteLine("Usage: ptree show");
+                Console.WriteLine("Usage: ptree show [--deep N]");
                 return;
             }
 
+            // القيمة الافتراضية للعمق (لا نهائي)
+            int depth = 5;
+
+            // فحص وجود --deep
+            int deepIndex = Array.IndexOf(args, "--deep");
+            if (deepIndex >= 0 && deepIndex + 1 < args.Length)
+            {
+                if (int.TryParse(args[deepIndex + 1], out int d))
+                    depth = d;
+            }
+
             string root = Directory.GetCurrentDirectory();
-            TreePrinter.PrintDirectory(root, "", IgnoreDirs);
+            TreePrinter.PrintDirectory(root, "   ", IgnoreDirs, 1, depth);
         }
     }
 }
