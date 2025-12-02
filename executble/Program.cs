@@ -10,7 +10,7 @@ class Program
 
         var process = new Process();
         process.StartInfo.FileName = exePath;
-        process.StartInfo.Arguments = "show --deep 2";
+        process.StartInfo.Arguments = "show";
         process.StartInfo.WorkingDirectory = workingDir;
 
         process.StartInfo.UseShellExecute = false;
@@ -27,7 +27,7 @@ class Program
         process.WaitForExit();
 
         // طباعة النتائج
-        Console.WriteLine("=== OUTPUT ===");
+        Console.WriteLine("=== OUTPUT OF ptree " + process.StartInfo.Arguments  +" ===");
         Console.WriteLine(output);
 
         if (!string.IsNullOrWhiteSpace(errors))

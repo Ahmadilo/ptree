@@ -5,7 +5,7 @@ namespace ptree
 {
     class Program
     {
-        static readonly string[] IgnoreDirs = new[]
+        static string[] IgnoreDirs = new[]
         {
             "node_modules", "vendor", ".git", "bin", "obj"
         };
@@ -16,6 +16,23 @@ namespace ptree
             {
                 Console.WriteLine("Usage: ptree show [--deep N]");
                 return;
+            }
+
+            int ingoredIndex = Array.IndexOf(args, "--ignore");
+            if(ingoredIndex >= 0 && ingoredIndex + 1 == args.Length)
+            {
+                for(int i = 0; i < IgnoreDirs.Length; i++)
+                {
+                    Console.WriteLine(IgnoreDirs[i]);
+                }
+                return;
+            }
+            else if(ingoredIndex >= 0 && ingoredIndex + 1 < args.Length)
+            {
+                for (int i = ingoredIndex + 1; i < args.Length; i++)
+                {
+                    IgnoreDirs = IgnoreDirs.Concat(new string[] { args[i] } ).ToArray();
+                }
             }
 
             // القيمة الافتراضية للعمق (لا نهائي)
@@ -29,7 +46,24 @@ namespace ptree
                     depth = d;
             }
 
+            int focusIndex = Array.IndexOf(args, "--focus");
+
             string root = Directory.GetCurrentDirectory();
+            if(focusIndex >= 0 && focusIndex + 1 < args.Length)
+            {
+                string focusDir = args[focusIndex + 1];
+                if(Directory.Exists(focusDir))
+                {
+                    TreePrinter.PrintDirectory(root, "   ", IgnoreDirs, 1, depth, focusDir);
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine($"The directory '{focusDir}' does not exist.");
+                    return;
+                }
+            }
+
             TreePrinter.PrintDirectory(root, "   ", IgnoreDirs, 1, depth);
         }
     }
