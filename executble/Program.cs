@@ -10,7 +10,7 @@ class Program
 
         var process = new Process();
         process.StartInfo.FileName = exePath;
-        process.StartInfo.Arguments = "show";
+        process.StartInfo.Arguments = "show --focus src";
         process.StartInfo.WorkingDirectory = workingDir;
 
         process.StartInfo.UseShellExecute = false;
