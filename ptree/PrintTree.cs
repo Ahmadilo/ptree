@@ -79,9 +79,9 @@ namespace ptree
         {
             
             Tree root = Tree.Scan(Directory.GetCurrentDirectory(), Options.deep, Options.ignore);
-            root.Collapse(Options.collapse);
             root.Focus(Options.focus);
-            LogJson(root);
+            root.Collapse(Options.collapse);
+            //LogJson(root);
             Print(root);
         }
     }

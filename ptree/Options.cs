@@ -31,23 +31,6 @@ namespace ptree
 
         static Action Action = () =>
         {
-            Console.WriteLine("=== Options ===");
-            Console.WriteLine($"deep: {deep}");
-
-            Console.WriteLine("ignores:");
-            foreach (var i in ignore)
-                Console.WriteLine($" - {i}");
-
-            Console.WriteLine("focus:");
-            foreach (var f in focus)
-                Console.WriteLine($" - {f}");
-
-            Console.WriteLine("collapse:");
-            foreach (var c in collapse)
-                Console.WriteLine($" - {c}");
-
-            Console.WriteLine($"log: {log}");
-
             PrintTree.Run();
         };
 

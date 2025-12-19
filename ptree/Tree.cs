@@ -119,6 +119,25 @@ namespace ptree
                 CollapseAll(child);
         }
 
+        private void Apply_BFS(Tree Node, Action<Tree> apply)
+        {
+            if (Node == null)
+                return;
+            Queue<Tree> queue = new Queue<Tree>();
+
+            queue.Enqueue(Node);
+
+            while (queue.Count > 0)
+            {
+                Tree current = queue.Dequeue();
+                apply(current);
+                foreach (var child in current.Children)
+                {
+                    queue.Enqueue(child);
+                }
+            }
+        }
+
         private bool ApplyFocus(Tree node, string[] focusList)
         {
             bool isFocusedNode =
@@ -139,8 +158,13 @@ namespace ptree
                 node.isFocus = true;
 
                 // 👇 افتح جميع أطفاله مباشرة
-                foreach (var child in node.Children)
-                    child.isCollapse = false;
+                Apply_BFS(node, n =>
+                {
+                    if (!n.isFile)
+                    {
+                        n.isCollapse = false;
+                    }
+                });
             }
             else if (shouldExpand)
             {
