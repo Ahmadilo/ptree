@@ -26,6 +26,7 @@ namespace ptree
         public static string[] focus = new string[] { };
         public static string[] collapse = new string[] { };
         public static string log = string.Empty;
+        public static bool isCount = false;
 
         static Action<ParseResult> Parser = (context) => { };
 
@@ -74,11 +75,18 @@ namespace ptree
                 Arity = ArgumentArity.ExactlyOne
             };
 
+            var countOption = new Option<bool>(name: "--count")
+            {
+                Description = "Display count of files and directories instead of tree.",
+                Arity = ArgumentArity.Zero
+            };
+
             showCommand.Add(deepOption);
             showCommand.Add(ignoreOpt);
             showCommand.Add(focusOpt);
             showCommand.Add(collapseOpt);
             showCommand.Add(logOption);
+            showCommand.Add(countOption);
 
             Parser = (context) =>
             {
@@ -87,6 +95,7 @@ namespace ptree
                 focus = context.GetValue(focusOpt) ?? new[] { "focus" };
                 collapse = context.GetValue(collapseOpt) ?? new[] { "collapse" };
                 log = context.GetValue(logOption) ?? "log";
+                isCount = context.GetValue(countOption);
 
                 Action.Invoke();
             };

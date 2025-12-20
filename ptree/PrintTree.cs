@@ -25,7 +25,6 @@ namespace ptree
             }
         }
 
-
         private static void Print(Tree node, string indent, bool isLast)
         {
             // اطبع اسم العقدة الحالية
@@ -43,13 +42,18 @@ namespace ptree
                 return;
             }
 
-            if (node.isCollapse)
+            if (node.isCollapse && Options.isCount)
             {
-                Console.WriteLine(node.Name + " (collapsed)");
+                Console.WriteLine(node.Name + $"/ (collapsed, {node.FileCount} Files)");
+                return;
+            }
+            else if(node.isCollapse)
+            {
+                Console.WriteLine(node.Name + "/ (collapsed)");
                 return;
             }
 
-            Console.WriteLine(node.Name);
+            Console.WriteLine(node.Name + "/");
 
             // إذا لم يكن collapse → اطبع الأطفال
             for (int i = 0; i < node.Children.Count; i++)
@@ -79,6 +83,10 @@ namespace ptree
         {
             
             Tree root = Tree.Scan(Directory.GetCurrentDirectory(), Options.deep, Options.ignore);
+            if(Options.isCount)
+            {
+                root.ComputeFileCount();
+            }
             root.Focus(Options.focus);
             root.Collapse(Options.collapse);
             //LogJson(root);

@@ -1,0 +1,187 @@
+﻿Title: Proposal: Path-Based BFS Context Format (.pbfs) for ptree (Future v2.0.0)
+
+Status: Design Idea / Deferred to v2.0.0
+Scope: Not part of ptree v1.0.0
+
+Description
+This document proposes a future extension to ptree introducing a custom
+context-oriented output format named .pbfs (Path-Based Breadth-First
+Structure).
+
+The purpose of .pbfs is not data serialization (like JSON or YAML),
+but context representation optimized for human reading and LLM interaction.
+
+This proposal is intentionally deferred to ptree v2.0.0.
+ptree v1.0.0 remains strictly focused on a single polished command:
+ptree show <options>.
+
+Motivation
+Existing formats such as JSON and YAML are poorly suited for representing
+project structure as conversational or cognitive context:
+
+Excessive syntactic noise
+
+Deep nesting that obscures relationships
+
+Difficult for LLMs to interpret semantically
+
+Unnatural for humans to annotate manually
+
+Tree ASCII output is human-friendly but:
+
+Hard for LLMs to parse reliably
+
+Dependent on indentation and symbols
+
+Not suitable for round-trip editing
+
+A new representation is needed that is:
+
+Linear
+
+Path-based
+
+Minimal
+
+Human-editable
+
+LLM-friendly
+
+Diff-friendly
+
+Suitable for context steering rather than data storage
+
+Concept Overview
+.pbfs is a line-based format where each line represents a filesystem path.
+Traversal order is breadth-first (BFS) by design.
+
+Each line starts with a root marker (@) followed by an absolute or
+context-relative path.
+
+Example:
+
+@/
+@/src
+@/src/components
+@/src/components/Button.tsx
+@/src/components/Input.tsx
+
+@/src/routes
+@/src/routes/login.tsx
+
+Blank lines may be used to visually separate logical groups but carry no
+semantic meaning.
+
+Key Characteristics
+
+One path per line
+
+No nesting syntax
+
+No brackets, braces, or indentation semantics
+
+Order conveys structure implicitly
+
+Paths are the primary semantic unit
+
+Designed for streaming and incremental reading
+
+Design Rationale
+The .pbfs format aligns with how LLMs naturally process information:
+
+Sequential tokens
+
+Repeated patterns
+
+Strong locality
+
+Minimal syntax
+
+This reduces cognitive load compared to JSON/YAML and improves model
+understanding of project structure and relationships.
+
+Future Interaction Model (Deferred)
+A potential future workflow enabled by .pbfs:
+
+Generate context:
+ptree show <options> --log output.pbfs
+
+Human annotates the file:
+@/src/components/Button.tsx comment "this file will be changed"
+@/src/routes/login.tsx todo "needs refactor"
+
+Re-ingest context:
+ptree dump output.pbfs
+
+ptree reconstructs the tree and displays annotations alongside nodes
+
+This creates a round-trip, human-in-the-loop context engineering workflow.
+
+Directive Model (Future)
+Lines may optionally support directives after the path:
+
+@<path> <directive> "<payload>"
+
+Examples:
+@/path/file.ts comment "needs optimization"
+@/path/file.ts todo "refactor logic"
+@/path/file.ts explain "auth flow entry point"
+
+This turns .pbfs into a declarative context language rather than a
+serialization format.
+
+Why This Is Deferred
+This proposal introduces:
+
+A new output format
+
+A new interaction paradigm
+
+Round-trip semantics
+
+Annotation handling
+
+Parsing and validation complexity
+
+Including this in v1.0.0 would:
+
+Expand scope significantly
+
+Delay release
+
+Dilute the core goal of ptree v1.0.0
+
+Therefore, .pbfs is explicitly planned for ptree v2.0.0.
+
+ptree v1.0.0 Scope Reminder
+ptree v1.0.0 intentionally supports only:
+
+ptree show <options>
+
+With:
+
+Scan
+
+Ignore
+
+Focus
+
+Collapse
+
+Depth control
+
+Logging
+
+Clear error handling
+
+No import/export, no DSL, no round-trip features.
+
+Conclusion
+.pbfs represents a future-facing context representation format optimized
+for LLM steering and human annotation.
+
+It is not a replacement for JSON/YAML, but a complementary format designed
+specifically for context engineering workflows.
+
+This proposal is documented for future development and intentionally
+excluded from ptree v1.0.0.

@@ -14,6 +14,7 @@ namespace ptree
         public bool isFocus { get; set; }
         public bool isCollapse { get; set; }
         public List<Tree> Children { get; set; } = new List<Tree>();
+        public int FileCount { get; set; } = 0;
 
         private static void ScanDirectory(Tree parent, DirectoryInfo dir, int level, int maxDepth, string[] ignore)
         {
@@ -48,7 +49,6 @@ namespace ptree
             }
         }
 
-
         public static Tree Scan(string rootPath, int deep, string[] ignore)
         {
             DirectoryInfo rootDir = new DirectoryInfo(rootPath);
@@ -64,7 +64,6 @@ namespace ptree
 
             return root;
         }
-
 
         public void Collapse(string[] collapse)
         {
@@ -96,7 +95,6 @@ namespace ptree
                 }
             }
         }
-
 
         public void Focus(string[] focusList)
         {
@@ -176,6 +174,25 @@ namespace ptree
             return shouldExpand;
         }
 
+        public int ComputeFileCount()
+        {
+            // إذا node ملف → 1
+            if (isFile)
+            {
+                FileCount = 1;
+                return 1;
+            }
+
+            int sum = 0;
+
+            foreach (var child in Children)
+            {
+                sum += child.ComputeFileCount();
+            }
+
+            FileCount = sum;
+            return sum;
+        }
 
     }
 }
