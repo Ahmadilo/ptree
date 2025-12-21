@@ -194,5 +194,40 @@ namespace ptree
             return sum;
         }
 
+        public static int CountFiles(string path, string[] ignore)
+        {
+            int count = 0;
+
+            try
+            {
+                foreach (var entry in Directory.EnumerateFileSystemEntries(path))
+                {
+                    string name = Path.GetFileName(entry);
+
+                    if (ignore.Contains(name, StringComparer.OrdinalIgnoreCase))
+                        continue;
+
+                    if (File.Exists(entry))
+                    {
+                        count++;
+                    }
+                    else if (Directory.Exists(entry))
+                    {
+                        count += CountFiles(entry, ignore);
+                    }
+                }
+            }
+            catch
+            {
+                // access denied, symlink loops, etc.
+            }
+
+            return count;
+        }
+
+        public int Files()
+        {
+            return CountFiles(this.FullPathName, Options.ignore);
+        }
     }
 }

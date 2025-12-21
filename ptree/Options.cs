@@ -22,11 +22,12 @@ namespace ptree
         //  --log <fileName>
 
         public static int deep = 5;
-        public static string[] ignore = new[] { "node_modules", "vendor", ".git", "bin", "obj" };
+        public static string[] ignore = new string[] { };
         public static string[] focus = new string[] { };
         public static string[] collapse = new string[] { };
         public static string log = string.Empty;
         public static bool isCount = false;
+        public static bool isNoIgnore = false;  
 
         static Action<ParseResult> Parser = (context) => { };
 
@@ -81,17 +82,34 @@ namespace ptree
                 Arity = ArgumentArity.Zero
             };
 
+            var noignoreOpt = new Option<bool>(name: "--no-ignore")
+            {
+                Description = "Do not ignore any directories.",
+                Arity = ArgumentArity.Zero
+            };
+
             showCommand.Add(deepOption);
             showCommand.Add(ignoreOpt);
             showCommand.Add(focusOpt);
             showCommand.Add(collapseOpt);
             showCommand.Add(logOption);
             showCommand.Add(countOption);
+            showCommand.Add(noignoreOpt);
 
             Parser = (context) =>
             {
                 deep = context.GetValue(deepOption);
-                ignore = ignore.Concat(context.GetValue(ignoreOpt) ?? new[] { "ignores" }).ToArray();
+                isNoIgnore = context.GetValue(noignoreOpt);
+
+                if(isNoIgnore)
+                {
+                    ignore = context.GetValue(ignoreOpt) ?? new string[] {};
+                }
+                else
+                {
+                    ignore = Program.IgnoreDirs.Concat(context.GetValue(ignoreOpt) ?? new string[] { }).ToArray();
+                }
+
                 focus = context.GetValue(focusOpt) ?? new[] { "focus" };
                 collapse = context.GetValue(collapseOpt) ?? new[] { "collapse" };
                 log = context.GetValue(logOption) ?? "log";
