@@ -27,7 +27,26 @@ namespace ptree
         public static string[] collapse = new string[] { };
         public static string log = string.Empty;
         public static bool isCount = false;
-        public static bool isNoIgnore = false;  
+        public static bool isNoIgnore = false;
+        public static bool isNotFiles = false;
+
+        static string[] ReadGitIgnore(string rootPath)
+        {
+            string gitignorePath = Path.Combine(rootPath, ".gitignore");
+
+            if (!File.Exists(gitignorePath))
+                return Array.Empty<string>();
+
+            return File.ReadAllLines(gitignorePath)
+                .Select(line => line.Trim())
+                .Where(line =>
+                    !string.IsNullOrWhiteSpace(line) &&
+                    !line.StartsWith("#") &&
+                    line.EndsWith("/"))
+                .Select(line => line.TrimEnd('/'))
+                .ToArray();
+        }
+
 
         static Action<ParseResult> Parser = (context) => { };
 
@@ -88,6 +107,12 @@ namespace ptree
                 Arity = ArgumentArity.Zero
             };
 
+            var nofilesOpt = new Option<bool>(name: "--no-files")
+            {
+                Description = "hide the all files",
+                Arity = ArgumentArity.Zero
+            };
+
             showCommand.Add(deepOption);
             showCommand.Add(ignoreOpt);
             showCommand.Add(focusOpt);
@@ -95,6 +120,7 @@ namespace ptree
             showCommand.Add(logOption);
             showCommand.Add(countOption);
             showCommand.Add(noignoreOpt);
+            showCommand.Add(nofilesOpt);
 
             Parser = (context) =>
             {
@@ -108,12 +134,19 @@ namespace ptree
                 else
                 {
                     ignore = Program.IgnoreDirs.Concat(context.GetValue(ignoreOpt) ?? new string[] { }).ToArray();
+                    //string[] names = ReadGitIgnore(Directory.GetCurrentDirectory());
+
+                    //if(names.Length > 0)
+                    //{
+                    //    ignore = ignore.ToHashSet().Concat(names.ToHashSet(StringComparer.OrdinalIgnoreCase)).ToArray();
+                    //}
                 }
 
                 focus = context.GetValue(focusOpt) ?? new[] { "focus" };
                 collapse = context.GetValue(collapseOpt) ?? new[] { "collapse" };
-                log = context.GetValue(logOption) ?? "log";
+                log = context.GetValue(logOption) ?? string.Empty;
                 isCount = context.GetValue(countOption);
+                isNotFiles = context.GetValue(nofilesOpt);
 
                 Action.Invoke();
             };
