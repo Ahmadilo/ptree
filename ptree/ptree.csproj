@@ -7,7 +7,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+	<PropertyGroup>
+		<Version>1.0.0-alpha</Version>
+		<InformationalVersion>ptree version 1.0.0-alpha</InformationalVersion>
+		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+	</PropertyGroup>
+
+
+
+	<ItemGroup>
     <PackageReference Include="System.CommandLine" Version="2.0.0" />
   </ItemGroup>
 
