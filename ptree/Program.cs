@@ -9,10 +9,11 @@ namespace ptree
         {
             "node_modules", "vendor", ".git", "bin", "obj"
         };
-
+        public static string Argemnts = string.Empty;
         static int Main(string[] args)
         {
             var root = Options.GetRootCommand();
+            Argemnts = "ptree " + string.Join(" ", args);
             return root.Parse(args).Invoke();
         }
     }

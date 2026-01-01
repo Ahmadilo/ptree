@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 
 namespace ptree
@@ -15,6 +13,9 @@ namespace ptree
         static StringBuilder TreeRender = new StringBuilder();
         private static void Print(Tree root)
         {
+            TreeRender.AppendLine(Program.Argemnts);
+            TreeRender.AppendLine();
+
             Console.WriteLine(root.Name); // اطبع root بدون خطوط
             TreeRender.AppendLine(root.Name);
 
@@ -90,19 +91,6 @@ namespace ptree
             }
         }
 
-        private static void LogJson(Tree root)
-        {
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
-
-            string json = JsonSerializer.Serialize(root, options);
-
-            File.WriteAllText("ptree-debug.json", json);
-        }
-
         private static void LogTree()
         {
             if (Options.log == string.Empty)
@@ -121,7 +109,6 @@ namespace ptree
             //}
             root.Focus(Options.focus);
             root.Collapse(Options.collapse);
-            //LogJson(root);
             Print(root);
             LogTree();
         }

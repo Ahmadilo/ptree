@@ -13,6 +13,14 @@
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<PublishAot>true</PublishAot>
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>
+
 
 
 	<ItemGroup>
