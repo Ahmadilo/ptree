@@ -1,4 +1,11 @@
-﻿## Getting Started
+﻿# ptree 🌲
+ptree is a directory tree viewer designed to give you control over how a project is seen.
+
+Instead of dumping a chaotic file structure, ptree lets you shape the context: what to show,
+what to hide, and what to emphasize. It is built for developers who need to document
+structures or provide clear context to LLMs.
+
+## Getting Started
 
 `ptree` is designed to give you control over how a project is *seen*.
 
@@ -13,8 +20,16 @@ Below are common usage patterns and what each command *does conceptually*.
 
 ### Basic project view
 
+
+#### command
+
 ```bash
 ptree show
+```
+
+#### Result
+
+```txt
 foodProject
 ├── app.py
 ├── config.py
@@ -87,8 +102,15 @@ This is the fastest way to get an initial sense of the project layout.
 
 ### Ignoring specific directories
 
+#### Command
+
 ```bash
 ptree show --ignore __pycache__
+```
+
+#### Result
+
+```txt
 foodProject
 ├── app.py
 ├── config.py
@@ -147,7 +169,41 @@ understanding the real structure.
 
 ---
 
+### Changing the Scan Root (`--from`)
+
+You don't need to cd into folders. You can point `ptree` to any sub-directory directly.
+
+#### Command
+
+```bash
+ptree show --from static/css
+```
+
+#### Result
+
+```txt
+css
+├── admin_menu.css
+├── card.css
+├── home.css
+├── home_hero.css
+├── login.css
+├── menu.css
+├── nav.css
+├── register.css
+└── style.css
+```
+
+
 ### Focusing on a specific area
+
+#### Command
+
+```bash
+ptree show --focus static
+```
+
+#### Result
 
 ```bash
 ptree show --focus static
@@ -191,8 +247,13 @@ This command answers the question:
 
 ### Focus first, then trim
 
+#### Command
+
 ```bash
 ptree show --focus static --collapse images
+```
+
+```txt
 foodProject
 ├── app.py
 ├── config.py
@@ -229,8 +290,13 @@ This allows you to:
 
 ### Structural overview without files
 
+#### Command
+
 ```bash
 ptree show --count --no-files
+```
+
+```bash
 foodProject
 ├── models/ (6 Files)
 │   └── __pycache__/ (3 Files)
@@ -257,13 +323,15 @@ Ideal for:
 
 ### Saving a reusable snapshot
 
+#### Command
+
 ```bash
 ptree show --count --no-files --log snapshot.txt
 ```
 
 ### Control the Level of Tree View
 
-```bash
+```txt
 ptree show --deep 1
 foodProject
 ├── app.py
