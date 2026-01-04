@@ -21,32 +21,43 @@ namespace ptree
             // لا ننزل أكثر من العمق المسموح
             if (level > maxDepth)
                 return;
-
-            // قراءة الملفات والمجلدات
-            FileSystemInfo[] entries = dir.GetFileSystemInfos();
-
-            foreach (var entry in entries)
+            try
             {
-                // تجاهل المجلدات المحددة
-                if (ignore.Contains(entry.Name, StringComparer.OrdinalIgnoreCase))
-                    continue;
+                // قراءة الملفات والمجلدات
+                FileSystemInfo[] entries = dir.GetFileSystemInfos();
 
-                // إنشاء node جديد
-                var node = new Tree
+                foreach (var entry in entries)
                 {
-                    Name = entry.Name,
-                    FullPathName = entry.FullName,
-                    isFile = entry is FileInfo,
-                };
+                    // تجاهل المجلدات المحددة
+                    if (ignore.Contains(entry.Name, StringComparer.OrdinalIgnoreCase))
+                        continue;
 
-                parent.Children.Add(node);
+                    // إنشاء node جديد
+                    var node = new Tree
+                    {
+                        Name = entry.Name,
+                        FullPathName = entry.FullName,
+                        isFile = entry is FileInfo,
+                    };
 
-                // لو كان مجلد → اكمل المسح
-                if (entry is DirectoryInfo subDir)
-                {
-                    ScanDirectory(node, subDir, level + 1, maxDepth, ignore);
+                    parent.Children.Add(node);
+
+                    // لو كان مجلد → اكمل المسح
+                    if (entry is DirectoryInfo subDir)
+                    {
+                        ScanDirectory(node, subDir, level + 1, maxDepth, ignore);
+                    }
                 }
             }
+            catch(UnauthorizedAccessException)
+            {
+                parent.Name += " (Access Denied)";
+            }
+            catch (Exception ex)
+            {
+                // لأي أخطاء أخرى غير متوقعة
+            }
+
         }
 
         public static Tree Scan(string rootPath, int deep, string[] ignore)
