@@ -102,7 +102,7 @@ namespace ptree
         public static void Run()
         {
             
-            Tree root = Tree.Scan(Directory.GetCurrentDirectory(), Options.deep, Options.ignore);
+            Tree root = Tree.Scan(Options.path, Options.deep, Options.ignore);
             //if(Options.isCount)
             //{
             //    root.ComputeFileCount();

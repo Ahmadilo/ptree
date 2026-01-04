@@ -8,8 +8,8 @@
   </PropertyGroup>
 
 	<PropertyGroup>
-		<Version>1.0.0-alpha</Version>
-		<InformationalVersion>ptree version 1.0.0-alpha</InformationalVersion>
+		<Version>1.2.0-alpha</Version>
+		<InformationalVersion>ptree version 1.2.0-alpha</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 	</PropertyGroup>
 

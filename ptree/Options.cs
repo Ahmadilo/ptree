@@ -8,6 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ptree
 {
@@ -21,6 +22,8 @@ namespace ptree
         //  --collapse <dir1, dir2,...>
         //  --log <fileName>
 
+        public static string path = Directory.GetCurrentDirectory();
+        public static string from = string.Empty;
         public static int deep = 5;
         public static string[] ignore = new string[] { };
         public static string[] focus = new string[] { };
@@ -113,6 +116,13 @@ namespace ptree
                 Arity = ArgumentArity.Zero
             };
 
+            var fromOpt = new Option<string>(name: "--from")
+            { 
+                Description = "Change the Scan from root to any directore under the root",
+                Arity = ArgumentArity.ExactlyOne,
+            };
+
+
             showCommand.Add(deepOption);
             showCommand.Add(ignoreOpt);
             showCommand.Add(focusOpt);
@@ -121,11 +131,29 @@ namespace ptree
             showCommand.Add(countOption);
             showCommand.Add(noignoreOpt);
             showCommand.Add(nofilesOpt);
+            showCommand.Add(fromOpt);
 
             Parser = (context) =>
             {
                 deep = context.GetValue(deepOption);
                 isNoIgnore = context.GetValue(noignoreOpt);
+
+                from = context.GetValue(fromOpt) ?? string.Empty;
+
+                if(from != string.Empty)
+                {
+                    from = from.Trim();
+                    from = from.TrimStart('/');
+                    string frompath = Path.Combine(path, from);
+
+                    if(!Directory.Exists(frompath))
+                    {
+                        Console.WriteLine(frompath + " is not Exist!!!");
+                        return;
+                    }
+
+                    path = frompath;
+                }
 
                 if(isNoIgnore)
                 {
