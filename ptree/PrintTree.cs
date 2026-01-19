@@ -74,6 +74,12 @@ namespace ptree
                 Console.WriteLine(msg);
                 TreeRender.AppendLine(msg);
             }
+            else if(Options.counts.Contains(node.Name))
+            {
+                string msg = node.Name + $"/ ({node.Files()} Files)";
+                Console.WriteLine(msg);
+                TreeRender.AppendLine(msg);
+            }
             else
             {
                 Console.WriteLine(node.Name + "/");

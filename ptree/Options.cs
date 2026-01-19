@@ -21,6 +21,9 @@ namespace ptree
         //  --focus <dir1, dir2,...>
         //  --collapse <dir1, dir2,...>
         //  --log <fileName>
+        //  --count <dir1, dir2, ...>
+        //  --count-all
+        //  --from <path>
 
         public static string path = Directory.GetCurrentDirectory();
         public static string from = string.Empty;
@@ -28,6 +31,7 @@ namespace ptree
         public static string[] ignore = new string[] { };
         public static string[] focus = new string[] { };
         public static string[] collapse = new string[] { };
+        public static string[] counts = new string[] { };
         public static string log = string.Empty;
         public static bool isCount = false;
         public static bool isNoIgnore = false;
@@ -98,10 +102,17 @@ namespace ptree
                 Arity = ArgumentArity.ExactlyOne
             };
 
-            var countOption = new Option<bool>(name: "--count")
+            var countOption = new Option<string[]>(name: "--count")
             {
-                Description = "Display count of files and directories instead of tree.",
-                Arity = ArgumentArity.Zero
+                Description = "Display count of Files in Directres that you chose.",
+                Arity = ArgumentArity.ZeroOrMore,
+                AllowMultipleArgumentsPerToken = true
+            };
+
+            var countAllOption = new Option<bool>(name: "--count-all")
+            {
+                Description = "Display count of Files in All Directres in Project.",
+                Arity = ArgumentArity.ZeroOrOne
             };
 
             var noignoreOpt = new Option<bool>(name: "--no-ignore")
@@ -132,6 +143,7 @@ namespace ptree
             showCommand.Add(noignoreOpt);
             showCommand.Add(nofilesOpt);
             showCommand.Add(fromOpt);
+            showCommand.Add(countAllOption);
 
             Parser = (context) =>
             {
@@ -170,11 +182,12 @@ namespace ptree
                     //}
                 }
 
-                focus = context.GetValue(focusOpt) ?? new[] { "focus" };
-                collapse = context.GetValue(collapseOpt) ?? new[] { "collapse" };
+                focus = context.GetValue(focusOpt) ?? new[] { "" };
+                collapse = context.GetValue(collapseOpt) ?? new[] { "" };
                 log = context.GetValue(logOption) ?? string.Empty;
-                isCount = context.GetValue(countOption);
+                isCount = context.GetValue(countAllOption);
                 isNotFiles = context.GetValue(nofilesOpt);
+                counts = context.GetValue(countOption) ?? new[] { "" };
 
                 Action.Invoke();
             };
