@@ -11,6 +11,57 @@ namespace ptree
     internal class PrintTree
     {
         static StringBuilder TreeRender = new StringBuilder();
+
+        private static void PrintLine(Tree node, string indent, bool isLast)
+        {
+            Console.Write(indent);
+            TreeRender.Append(indent);
+
+            string branch = isLast ? "└── " : "├── ";
+            Console.Write(branch);
+            TreeRender.Append(branch);
+
+            string line;
+
+            if (node.isFile)
+            {
+                line = node.Name;
+            }
+            else if (node.isCollapse)
+            {
+                if (Options.isCount || Options.counts.Contains(node.Name))
+                    line = $"{node.Name}/ (collapsed, {node.Files()} Files)";
+                else
+                    line = $"{node.Name}/ (collapsed)";
+            }
+            else if (Options.isCount || Options.counts.Contains(node.Name))
+            {
+                line = $"{node.Name}/ ({node.Files()} Files)";
+            }
+            else
+            {
+                line = $"{node.Name}/";
+            }
+
+            Console.WriteLine(line);
+            TreeRender.AppendLine(line);
+        }
+
+
+        private static bool Stop(Tree node)
+        {
+            if (node == null)
+                return true;
+
+            if (node.isFile)
+                return true;
+
+            if (node.isCollapse)
+                return true;
+
+            return true;
+        }
+
         private static void Print(Tree root)
         {
             TreeRender.AppendLine(Program.Argemnts);
@@ -30,70 +81,24 @@ namespace ptree
 
         private static void Print(Tree node, string indent, bool isLast)
         {
-            // اطبع اسم العقدة الحالية
             if (node.isFile && Options.isNotFiles)
                 return;
-            Console.Write(indent);
-            TreeRender.Append(indent);
 
-            if (isLast)
-            {
-                Console.Write("└── ");
-                TreeRender.Append("└── ");
-            }
-            else
-            {
-                Console.Write("├── ");
-                TreeRender.Append("├── ");
-            }
+            PrintLine(node, indent, isLast);
 
-            // طباعة الاسم مع تمييز بسيط للحالات
-            if (node.isFile)
-            {
-                Console.WriteLine(node.Name);
-                TreeRender.AppendLine(node.Name);
+            if (Stop(node))
                 return;
-            }
 
-            if (node.isCollapse && Options.isCount)
-            {
-                int count = node.Files();
-                Console.WriteLine(node.Name + $"/ (collapsed, {count} Files)");
-                TreeRender.AppendLine(node.Name + $"/ (collapsed, {count} Files)");
-                return;
-            }
-            else if(node.isCollapse)
-            {
-                Console.WriteLine(node.Name + "/ (collapsed)");
-                TreeRender.AppendLine(node.Name + "/ (collapsed)");
-                return;
-            }
-            else if(Options.isCount)
-            {
-                string msg = node.Name + $"/ ({node.Files()} Files)";
-                Console.WriteLine(msg);
-                TreeRender.AppendLine(msg);
-            }
-            else if(Options.counts.Contains(node.Name))
-            {
-                string msg = node.Name + $"/ ({node.Files()} Files)";
-                Console.WriteLine(msg);
-                TreeRender.AppendLine(msg);
-            }
-            else
-            {
-                Console.WriteLine(node.Name + "/");
-                TreeRender.AppendLine(node.Name + "/");
-            }
-
-
-            // إذا لم يكن collapse → اطبع الأطفال
             for (int i = 0; i < node.Children.Count; i++)
             {
                 var child = node.Children[i];
                 bool lastChild = (i == node.Children.Count - 1);
 
-                Print(child, indent + (isLast ? "    " : "│   "), lastChild);
+                Print(
+                    child,
+                    indent + (isLast ? "    " : "│   "),
+                    lastChild
+                );
             }
         }
 

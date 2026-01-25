@@ -205,7 +205,7 @@ namespace ptree
             return sum;
         }
 
-        public static int CountFiles(string path, string[] ignore)
+        public static int CountFiles(string path)
         {
             int count = 0;
 
@@ -213,18 +213,13 @@ namespace ptree
             {
                 foreach (var entry in Directory.EnumerateFileSystemEntries(path))
                 {
-                    string name = Path.GetFileName(entry);
-
-                    if (ignore.Contains(name, StringComparer.OrdinalIgnoreCase))
-                        continue;
-
                     if (File.Exists(entry))
                     {
                         count++;
                     }
                     else if (Directory.Exists(entry))
                     {
-                        count += CountFiles(entry, ignore);
+                        count += CountFiles(entry);
                     }
                 }
             }
@@ -238,7 +233,7 @@ namespace ptree
 
         public int Files()
         {
-            return CountFiles(this.FullPathName, Options.ignore);
+            return CountFiles(this.FullPathName);
         }
     }
 }
