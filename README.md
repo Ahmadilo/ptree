@@ -293,7 +293,7 @@ This allows you to:
 #### Command
 
 ```bash
-ptree show --count --no-files
+ptree show --count-all --no-files
 ```
 
 ```bash
@@ -326,7 +326,7 @@ Ideal for:
 #### Command
 
 ```bash
-ptree show --count --no-files --log snapshot.txt
+ptree show --count-all --no-files --collapse-all --log snapshot.txt
 ```
 
 ### Control the Level of Tree View

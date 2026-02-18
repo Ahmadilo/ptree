@@ -60,6 +60,12 @@ namespace ptree
 
         }
 
+
+        Tree()
+        {
+            isCollapse = Options.isCollapseAll;
+        }
+
         public static Tree Scan(string rootPath, int deep, string[] ignore)
         {
             DirectoryInfo rootDir = new DirectoryInfo(rootPath);

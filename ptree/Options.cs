@@ -24,6 +24,7 @@ namespace ptree
         //  --count <dir1, dir2, ...>
         //  --count-all
         //  --from <path>
+        //  --collapse-all
 
         public static string path = Directory.GetCurrentDirectory();
         public static string from = string.Empty;
@@ -36,23 +37,7 @@ namespace ptree
         public static bool isCount = false;
         public static bool isNoIgnore = false;
         public static bool isNotFiles = false;
-
-        static string[] ReadGitIgnore(string rootPath)
-        {
-            string gitignorePath = Path.Combine(rootPath, ".gitignore");
-
-            if (!File.Exists(gitignorePath))
-                return Array.Empty<string>();
-
-            return File.ReadAllLines(gitignorePath)
-                .Select(line => line.Trim())
-                .Where(line =>
-                    !string.IsNullOrWhiteSpace(line) &&
-                    !line.StartsWith("#") &&
-                    line.EndsWith("/"))
-                .Select(line => line.TrimEnd('/'))
-                .ToArray();
-        }
+        public static bool isCollapseAll = false;
 
 
         static Action<ParseResult> Parser = (context) => { };
@@ -133,6 +118,12 @@ namespace ptree
                 Arity = ArgumentArity.ExactlyOne,
             };
 
+            var collapseAllOpt = new Option<bool>(name: "--collapse-all")
+            {
+                Description = "Collpase All Folders.",
+                Arity = ArgumentArity.ZeroOrOne
+            };
+
 
             showCommand.Add(deepOption);
             showCommand.Add(ignoreOpt);
@@ -144,6 +135,7 @@ namespace ptree
             showCommand.Add(nofilesOpt);
             showCommand.Add(fromOpt);
             showCommand.Add(countAllOption);
+            showCommand.Add(collapseAllOpt);
 
             Parser = (context) =>
             {
@@ -188,6 +180,7 @@ namespace ptree
                 isCount = context.GetValue(countAllOption);
                 isNotFiles = context.GetValue(nofilesOpt);
                 counts = context.GetValue(countOption) ?? new[] { "" };
+                isCollapseAll = context.GetValue(collapseAllOpt);
 
                 Action.Invoke();
             };
