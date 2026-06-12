@@ -106,8 +106,19 @@ namespace ptree
         {
             if (Options.log == string.Empty)
                 return;
+            try
+            {
+                File.WriteAllText(Options.log, TreeRender.ToString());
+            }
+            catch (Exception e)
+            {
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                }
 
-            File.WriteAllText(Options.log, TreeRender.ToString());
+                Console.WriteLine(e.Message);
+            }
         }
 
         public static void Run()

@@ -28,7 +28,7 @@ namespace ptree
 
         public static string path = Directory.GetCurrentDirectory();
         public static string from = string.Empty;
-        public static int deep = 5;
+        public static int deep = int.MaxValue;
         public static string[] ignore = new string[] { };
         public static string[] focus = new string[] { };
         public static string[] collapse = new string[] { };
