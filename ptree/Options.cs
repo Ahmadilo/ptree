@@ -57,7 +57,7 @@ namespace ptree
             {
                 Description = "Depth of directory tree to display.",
                 Arity = ArgumentArity.ZeroOrOne,
-                DefaultValueFactory = (a) => 5
+                DefaultValueFactory = (a) => int.MaxValue,
             };
 
             var ignoreOpt = new Option<string[]>(name: "--ignore")
