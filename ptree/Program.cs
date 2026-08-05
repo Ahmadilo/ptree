@@ -10,6 +10,7 @@ namespace ptree
             "node_modules", "vendor", ".git", "bin", "obj"
         };
         public static string Argemnts = string.Empty;
+        [STAThread]
         static int Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;

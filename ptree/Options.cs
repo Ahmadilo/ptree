@@ -38,6 +38,7 @@ namespace ptree
         public static bool isNoIgnore = false;
         public static bool isNotFiles = false;
         public static bool isCollapseAll = false;
+        public static bool isCopy = false;
 
 
         static Action<ParseResult> Parser = (context) => { };
@@ -124,6 +125,12 @@ namespace ptree
                 Arity = ArgumentArity.ZeroOrOne
             };
 
+            var isCopyOpt = new Option<bool>(name: "--copy")
+            {
+                Description = "Copy the output to Clipboard",
+                Arity = ArgumentArity.Zero,
+            };
+
 
             showCommand.Add(deepOption);
             showCommand.Add(ignoreOpt);
@@ -136,6 +143,7 @@ namespace ptree
             showCommand.Add(fromOpt);
             showCommand.Add(countAllOption);
             showCommand.Add(collapseAllOpt);
+            showCommand.Add(isCopyOpt);
 
             Parser = (context) =>
             {
@@ -181,6 +189,7 @@ namespace ptree
                 isNotFiles = context.GetValue(nofilesOpt);
                 counts = context.GetValue(countOption) ?? new[] { "" };
                 isCollapseAll = context.GetValue(collapseAllOpt);
+                isCopy = context.GetValue(isCopyOpt);
 
                 Action.Invoke();
             };

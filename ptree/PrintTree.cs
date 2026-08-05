@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
+using TextCopy;
 
 namespace ptree
 {
@@ -132,6 +132,10 @@ namespace ptree
             root.Focus(Options.focus);
             root.Collapse(Options.collapse);
             Print(root);
+            if(Options.isCopy == true)
+            {
+                ClipboardService.SetText(TreeRender.ToString());
+            }
             LogTree();
         }
     }
