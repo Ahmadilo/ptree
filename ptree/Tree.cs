@@ -16,7 +16,7 @@ namespace ptree
         public List<Tree> Children { get; set; } = new List<Tree>();
         public int FileCount { get; set; } = 0;
 
-        private static void ScanDirectory(Tree parent, DirectoryInfo dir, int level, int maxDepth, string[] ignore)
+        private static void ScanDirectory(Tree parent, DirectoryInfo dir, int level, int maxDepth, IgnorePolicy ignorePolicy)
         {
             // لا ننزل أكثر من العمق المسموح
             if (level > maxDepth)
@@ -28,8 +28,8 @@ namespace ptree
 
                 foreach (var entry in entries)
                 {
-                    // تجاهل المجلدات المحددة
-                    if (ignore.Contains(entry.Name, StringComparer.OrdinalIgnoreCase))
+                    // تجاهل المجلدات المحددة (default + --ignore + .gitignore)
+                    if (ignorePolicy.IsIgnored(entry))
                         continue;
 
                     // إنشاء node جديد
@@ -45,7 +45,7 @@ namespace ptree
                     // لو كان مجلد → اكمل المسح
                     if (entry is DirectoryInfo subDir)
                     {
-                        ScanDirectory(node, subDir, level + 1, maxDepth, ignore);
+                        ScanDirectory(node, subDir, level + 1, maxDepth, ignorePolicy);
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace ptree
             isCollapse = Options.isCollapseAll;
         }
 
-        public static Tree Scan(string rootPath, int deep, string[] ignore)
+        public static Tree Scan(string rootPath, int deep, IgnorePolicy ignorePolicy)
         {
             DirectoryInfo rootDir = new DirectoryInfo(rootPath);
 
@@ -77,7 +77,7 @@ namespace ptree
                 isFile = false
             };
 
-            ScanDirectory(root, rootDir, 1, deep, ignore);
+            ScanDirectory(root, rootDir, 1, deep, ignorePolicy);
 
             return root;
         }

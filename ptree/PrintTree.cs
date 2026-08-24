@@ -123,8 +123,10 @@ namespace ptree
 
         public static void Run()
         {
-            
-            Tree root = Tree.Scan(Options.path, Options.deep, Options.ignore);
+            // الـ .gitignore يُقرأ من المسار النهائي (بعد تطبيق --from)
+            var ignorePolicy = new IgnorePolicy(Options.ignore, Options.path, !Options.isNoIgnore);
+
+            Tree root = Tree.Scan(Options.path, Options.deep, ignorePolicy);
             //if(Options.isCount)
             //{
             //    root.ComputeFileCount();
